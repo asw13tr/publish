@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <title>Taş - Kağıt- Makas</title>
+</head>
+<body class="bg-light">
+    <div id="game" class="container-fluid">
+
+    <div class="row justify-content-center mt-5 pt-5">
+
+        <div class="col-sm-3 col-lg-2"><user-card v-bind:player="player1"></user-card></div>
+        <div class="col-sm-5">
+
+            <div v-if="isFinish">
+                <div v-if="player1.winner" class="bg-success text-light text-weight-bold text-center pt-5 pb-5">Bravo! Sen Kazandın.</div>
+                <div v-if="player2.winner" class="bg-danger text-light text-weight-bold text-center pt-5 pb-5">Maalesef! Bilgisayarı Bile Yenemedin</div>
+                <div class="mt-2 text-center">
+                    <button v-on:click="restartGame" class="btn btn-primary">Yeniden Oyna</button>
+                </div>
+            </div>
+
+            <div v-else="isFinish">
+
+                <div class="row" v-if="isSelected">
+                    <div v-if="isWin" class="col-12 bg-success text-light text-weight-bold text-center pt-4 pb-4"><h4>Bu el iyiydin :)</h4></div>
+                    <div v-if="isLose" class="col-12 bg-danger text-light text-weight-bold text-center pt-4 pb-4"><h4>Üzgünüm kaybettin :(</h4></div>
+                    <div v-if="isTie" class="col-12 bg-warning text-light text-weight-bold text-center pt-4 pb-4"><h4>Tekrar Deneyin :|</h4></div>
+                </div>
+
+                <div class="row" v-else="isSelected">
+                    <div class="col-12 p-0 m-0"><h6 class="m-0 bg-info text-center text-light p-1">Bir Seçim Yapın</h6></div>
+                    <item-card v-for="option in options" v-bind:key="option.id" v-bind:item="option"></item-card>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="col-sm-3 col-lg-2"><user-card v-bind:player="player2"></user-card></div>
+
+
+    </div>
+
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="custom.js"></script>
+</body>
+</html>
