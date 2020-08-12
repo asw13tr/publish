@@ -24,7 +24,7 @@ Vue.component('user-card', {
 
 Vue.component('item-card', {
     props:['item'],
-    template: `<div class="col-sm-4 p-1"><button class="btn btn-default p-0 m-0" v-on:click="selectedItem(item)" :title="item.name"><img :src="item.img" :alt="item.name" class="img-fluid img-thumbnail"></button></div>`,
+    template: `<div class="col-4 p-1"><button class="btn btn-default p-0 m-0" v-on:click="selectedItem(item)" :title="item.name"><img :src="item.img" :alt="item.name" class="img-fluid img-thumbnail"></button></div>`,
     methods: {
         selectedItem: function(item){
             let computerItem = game.computerSelect();
