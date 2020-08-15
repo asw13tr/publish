@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
+    <title>Akıllı Girişimci</title>
+    <style media="screen">
+    html, body, #app{height: 100vh;}
+    .row{margin-left: 0 !important; margin-right: 0 !important;}
+    *{border-radius: 0px !important;}
+    #cllickTimesBar .dropdown-menu{min-width: auto; width:80px;}
+    #cllickTimesBar .dropdown-menu span{ cursor: pointer; border-bottom: 1px dashed rgba(0,0,0,0.2)}
+    #cllickTimesBar .dropdown-menu span:hover{ font-weight: 600; font-size: 1.2rem}
+    .disabled{ position: relative; opacity: 0.61}
+    .disabled::after{ content:''; display: block; width:100%; position:absolute; top: 0; bottom: 0; left: 0; right: 0; background-color: rgba(0,0,0,0.1)}
+    </style>
+</head>
+<body class="bg-light pt-5">
+<section class="w-100 h-100" id="app">
+
+
+    <header class="fixed-top w-100">
+    <div class="container-fluid p-0">
+        <div class="row justify-content-center">
+            <div class="bg-primary pt-3 pb-3 text-light d-flex justify-content-between" :class="site.outerColClass">
+                <div class="font-weight-bold"><i class="text-warning fas fa-signal"></i> {{ Math.floor(player.xp/dividing) }}</div>
+                <div class="font-weight-bold"><i class="text-warning fas fa-star"></i> {{ player.xp }} XP</div>
+
+                <div class="font-weight-bold dropdown" id="cllickTimesBar">
+                    <span class="dropdown-toggle" type="button" id="clickTimesDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="text-warning fas fa-mouse"></i> {{ player.clickTimes }}x
+                    </span>
+                    <div class="dropdown-menu bg-primary p-0 text-center font-weight" aria-labelledby="clickTimesDropdown">
+                        <span class="dropdown-item text-light bg-primary" v-for="item in clickTimes" @click="setClickTimes(item.click)">{{ item.click }}x</span>
+                    </div>
+                </div>
+
+                <div class="font-weight-bold"><i class="text-warning fas fa-coins"></i> {{ player.money.toFixed(2) }}</div>
+            </div>
+        </div>
+    </div>
+    </header>
+
+    <div class="container-fluid p-0 mt-2">
+    <div class="row justify-content-center">
+    <div class="p-0" :class="site.outerColClass">
+
+    <ul class="list-unstyled">
+
+
+
+
+
+
+        <template v-for="(item, index) in products">
+            <li :id="'product-'+item.id" class="media mb-2 mt-2 border bg-light" :class="{'disabled': !(Math.floor(player.xp/dividing) >= item.level)}">
+                <button class="btn btn-default bg-white border img-thumbnail m-1 position-relative" @click="buyProduct(index)" :disabled="!(Math.floor(player.xp/dividing) >= item.level)">
+                    <img :src="'images/'+item.image">
+                    <span class="badge badge-danger position-absolute" style="top: auto; bottom:18px; right:0; opacity:0.61"><strong><i class="fas fa-coins"></i></strong> {{item.buy.toFixed(2)}}</span>
+                    <span class="badge badge-success position-absolute" style="top: auto; bottom:0; right:0; opacity:0.61"><strong><i class="fas fa-coins"></i></strong> {{item.sale.toFixed(2)}}</span>
+                </button>
+                <div class="media-body p-1 pt-2">
+                    <div class="row p-0 m-0 mb-1">
+                        <div class="col-6 p-0 mr-auto"><h5>{{ item.name }}</h5></div>
+                        <div class="col-6 p-0 text-right">
+                            <span :class="{ 'text-info':item.stock>0 , 'text-danger':item.stock<1 }"><i class="fas fa-box-open"></i> <strong>{{ item.stock }}</strong></span>
+                            <button v-show="item.loop==null" class="btn btn-sm btn-success" @click="sellProduct(index)" :disabled="!(Math.floor(player.xp/dividing) >= item.level)"><i class="fas fa-play"></i></button>
+                            <button v-show="item.loop!=null" class="btn btn-sm btn-danger" @click="sellStop(index)" :disabled="!(Math.floor(player.xp/dividing) >= item.level)"><i class="fas fa-stop"></i></button>
+                        </div>
+                    </div>
+                    <div class="progress" style=" height:30px;">
+                        <div    class="progress-bar progress-bar-striped"
+                                :class="{'progress-bar-animated': item.loop != null, 'bg-danger': item.loop==null, 'bg-success': item.loop!=null}"
+                                role="progressbar"
+                                :style="{ height:'30px', width:item.percent+'%', transition: 'width .2s !important' }"
+                                aria-valuemin="0"
+                                aria-valuemax="100"></div>
+                    </div>
+                </div>
+            </li>
+        </template>
+
+
+
+
+
+
+
+    </ul>
+
+    </div><!-- / col-sm-6 col-md-6 col-lg-5 p-0 -->
+    </div><!-- / row justify-content-center-->
+    </div><!-- / container-fluid -->
+
+
+    </section>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/js/all.min.js" integrity="sha512-YSdqvJoZr83hj76AIVdOcvLWYMWzy6sJyIMic2aQz5kh2bPTd9dzY3NtdeEAzPp/PhgZqr4aJObB3ym/vsItMg==" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="custom.js"></script>
+</body>
+</html>
